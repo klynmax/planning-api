@@ -1,5 +1,6 @@
 package io.github.kl.planning_api.domain.card;
 
+import io.github.kl.planning_api.common.exceptions.RecordNotFoundException;
 import io.github.kl.planning_api.common.exceptions.ValidationException;
 import io.github.kl.planning_api.domain.card.dto.CardDetails;
 import io.github.kl.planning_api.domain.card.dto.CardForm;
@@ -7,6 +8,8 @@ import io.github.kl.planning_api.domain.card.mapper.CardMapper;
 import io.github.kl.planning_api.domain.card.model.CardEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class CardService {
@@ -28,5 +31,11 @@ public class CardService {
         CardEntity entity = mapper.toEntity(form);
         repository.save(entity);
         return mapper.toDetails(entity);
+    }
+
+    public CardDetails getDetails(UUID id) {
+        return repository.findById(id)
+                .map(mapper::toDetails)
+                .orElseThrow(() -> new RecordNotFoundException());
     }
 }

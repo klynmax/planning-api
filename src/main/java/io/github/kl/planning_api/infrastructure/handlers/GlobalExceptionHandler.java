@@ -1,5 +1,6 @@
 package io.github.kl.planning_api.infrastructure.handlers;
 
+import io.github.kl.planning_api.common.exceptions.RecordNotFoundException;
 import io.github.kl.planning_api.common.exceptions.ValidationException;
 import io.github.kl.planning_api.common.validation.InvalidFields;
 import org.springframework.http.HttpStatus;
@@ -42,5 +43,17 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(status).body(body);
+    }
+
+    @ExceptionHandler(RecordNotFoundException.class)
+    public ResponseEntity<?> handleRecordNotFoundException(RecordNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                Map.of(
+                        "timestamp", LocalDateTime.now(),
+                        "status", HttpStatus.NOT_FOUND.value(),
+                        "error", e.getMessage(),
+                        "message", e.getMessage()
+                )
+        );
     }
 }
