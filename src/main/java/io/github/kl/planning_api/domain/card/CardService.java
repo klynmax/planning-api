@@ -8,6 +8,7 @@ import io.github.kl.planning_api.domain.card.mapper.CardMapper;
 import io.github.kl.planning_api.domain.card.model.CardEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -37,5 +38,19 @@ public class CardService {
         return repository.findById(id)
                 .map(mapper::toDetails)
                 .orElseThrow(() -> new RecordNotFoundException());
+    }
+
+    @Transactional
+    public void update(UUID id, CardForm updateData) {
+        var entity = repository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException());
+
+        var result = validator.validate(updateData);
+
+        if(result.isInvalid()) {
+            throw  new ValidationException(result.getInvalidFields());
+        }
+
+        mapper.update(entity, updateData);
     }
 }
