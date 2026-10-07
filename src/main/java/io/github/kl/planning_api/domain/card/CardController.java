@@ -2,6 +2,7 @@ package io.github.kl.planning_api.domain.card;
 
 import io.github.kl.planning_api.domain.card.dto.CardDetails;
 import io.github.kl.planning_api.domain.card.dto.CardForm;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class CardController {
     private CardService service;
 
     @PostMapping
-    public ResponseEntity<CardDetails> create(@RequestBody CardForm newCard) {
+    public ResponseEntity<CardDetails> create(@RequestBody @Valid CardForm newCard) {
         CardDetails details = service.create(newCard);
         return ResponseEntity.status(HttpStatus.CREATED).body(details);
     }
