@@ -6,16 +6,20 @@ import io.github.kl.planning_api.domain.card.dto.CardForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class CardValidator {
 
     @Autowired
     private CardRepository repository;
 
-    public ValidationResult validate(CardForm form) {
+    public ValidationResult validate(CardForm form, UUID id) {
         var result = ValidationResult.novo();
 
-        if(repository.findByName(form.name()).isPresent()) {
+        var isNotEmptyList = !repository.findByNameAndNotId(form.name(), id).isEmpty();
+
+        if(isNotEmptyList) {
             result.add(new InvalidFields("nome", "Já cadastrado."));
         }
 

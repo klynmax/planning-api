@@ -23,7 +23,7 @@ public class CardService {
     private CardMapper mapper;
 
     public CardDetails create(CardForm form){
-        var result = validator.validate(form);
+        var result = validator.validate(form, null);
 
         if(result.isInvalid()) {
             throw new ValidationException(result.getInvalidFields());
@@ -45,7 +45,7 @@ public class CardService {
         var entity = repository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException());
 
-        var result = validator.validate(updateData);
+        var result = validator.validate(updateData, id);
 
         if(result.isInvalid()) {
             throw  new ValidationException(result.getInvalidFields());
