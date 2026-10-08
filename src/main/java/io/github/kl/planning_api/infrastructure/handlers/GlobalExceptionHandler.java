@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
                 "timestamp", LocalDateTime.now(),
                 "status", status.value(),
                 "error", e.getMessage(),
-                "campos invalidos", e.getInvalidFields()
+                "invalidFields", e.getInvalidFields()
         );
 
         return ResponseEntity.status(status).body(body);
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
                 "timestamp", LocalDateTime.now(),
                 "status", status.value(),
                 "error", e.getMessage(),
-                "campos invalidos", invalidFields
+                "invalidFields", invalidFields
         );
 
         return ResponseEntity.status(status).body(body);

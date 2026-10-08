@@ -7,6 +7,8 @@ import io.github.kl.planning_api.domain.card.dto.CardForm;
 import io.github.kl.planning_api.domain.card.mapper.CardMapper;
 import io.github.kl.planning_api.domain.card.model.CardEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,5 +54,11 @@ public class CardService {
         }
 
         mapper.update(entity, updateData);
+    }
+
+    public Page<CardDetails> getList(PageRequest pageRequest) {
+        return repository
+                .findAll(pageRequest)
+                .map(mapper::toDetails);
     }
 }

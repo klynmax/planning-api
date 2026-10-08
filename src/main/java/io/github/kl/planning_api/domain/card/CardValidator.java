@@ -20,7 +20,7 @@ public class CardValidator {
         var isNotEmptyList = !repository.findByNameAndNotId(form.name(), id).isEmpty();
 
         if(isNotEmptyList) {
-            result.add(new InvalidFields("nome", "Já cadastrado."));
+            result.add(new InvalidFields("name", "Já cadastrado."));
         }
 
         return result;
