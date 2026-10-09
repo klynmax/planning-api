@@ -45,4 +45,10 @@ public class CardController {
         var pageRequest = PageRequest.of(page, size);
         return service.getList(pageRequest);
     }
+
+    @PatchMapping("{id}/status")
+    public ResponseEntity<Void> updateStatus(@PathVariable UUID id) {
+        service.updateStatus(id);
+        return ResponseEntity.noContent().build();
+    }
 }

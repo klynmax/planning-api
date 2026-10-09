@@ -61,4 +61,11 @@ public class CardService {
                 .findAll(pageRequest)
                 .map(mapper::toDetails);
     }
+
+    @Transactional
+    public void updateStatus(UUID id) {
+        var card = repository.findById(id).orElseThrow(RecordNotFoundException::new);
+
+        card.setActive(!card.getActive());
+    }
 }

@@ -28,6 +28,9 @@ public class CardEntity {
     @Column(name = "registration_date")
     private LocalDateTime registrationDate;
 
+    @Column(name = "active")
+    private  Boolean active = true;
+
     @PrePersist
     public void prePersist() {
         setRegistrationDate(LocalDateTime.now());
