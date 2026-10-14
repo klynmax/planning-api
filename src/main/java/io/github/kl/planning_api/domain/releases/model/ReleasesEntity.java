@@ -17,7 +17,7 @@ public class ReleasesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID ID;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
