@@ -16,8 +16,8 @@ public record ReleasesForm(
         ReleaseType type,
         @NotNull(message = "Campo obrigatório.")
         LocalDate date,
-        CardEntity card,
         @NotNull(message = "Campo obrigatório.")
         @DecimalMin(value = "0.01", message = "Valor deve ser maior que zero.")
-        BigDecimal value
+        BigDecimal value,
+        UUID cardId
 ) {}
