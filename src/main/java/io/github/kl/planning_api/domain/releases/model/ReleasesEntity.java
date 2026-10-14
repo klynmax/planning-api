@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_Releases")
+@Table(name = "tb_releases")
 @Getter@Setter
 public class ReleasesEntity {
 
@@ -27,13 +27,13 @@ public class ReleasesEntity {
     @Enumerated(EnumType.STRING)
     private ReleaseType type;
 
-    @Column(nullable = false)
+    @Column(name = "release_date", nullable = false)
     private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "card_id")
     private CardEntity card;
 
-    @Column(nullable = false, precision = 15, scale = 2)
+    @Column(name = "amount", nullable = false, precision = 15, scale = 2)
     private BigDecimal value;
 }
