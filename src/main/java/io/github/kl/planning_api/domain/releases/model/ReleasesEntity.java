@@ -24,6 +24,9 @@ public class ReleasesEntity {
     private CategoryEntity category;
 
     @Column(nullable = false)
+    private String description;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ReleaseType type;
 

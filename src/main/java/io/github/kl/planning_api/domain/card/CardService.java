@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -67,5 +68,12 @@ public class CardService {
         var card = repository.findById(id).orElseThrow(RecordNotFoundException::new);
 
         card.setActive(!card.getActive());
+    }
+
+    public List<CardDetails> listCardActive() {
+        return repository.findByActiveTrue()
+                .stream()
+                .map(mapper::toDetails)
+                .toList();
     }
 }

@@ -13,6 +13,8 @@ public record ReleasesForm(
         @NotNull(message = "Campo obrigatório.")
         UUID categoryId,
         @NotNull(message = "Campo obrigatório.")
+        String description,
+        @NotNull(message = "Campo obrigatório.")
         ReleaseType type,
         @NotNull(message = "Campo obrigatório.")
         LocalDate date,

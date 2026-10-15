@@ -20,4 +20,6 @@ public interface CardRepository extends JpaRepository<CardEntity, UUID> {
             and c.name = :name
     """)
     List<CardEntity> findByNameAndNotId(@Param("name") String name, @Param("id") UUID id);
+
+    List<CardEntity> findByActiveTrue();
 }
