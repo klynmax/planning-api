@@ -1,5 +1,6 @@
 package io.github.kl.planning_api.domain.releases;
 
+import io.github.kl.planning_api.common.exceptions.RecordNotFoundException;
 import io.github.kl.planning_api.common.exceptions.ValidationException;
 import io.github.kl.planning_api.domain.card.CardRepository;
 import io.github.kl.planning_api.domain.card.model.CardEntity;
@@ -81,5 +82,11 @@ public class ReleasesService {
         var result = repository.findAll(spec, pageRequest);
 
         return result.map(mapper::toDetails);
+    }
+
+    public void delete(UUID id) {
+        var releases = repository.findById(id)
+                .orElseThrow(RecordNotFoundException::new);
+        repository.delete(releases);
     }
 }
