@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public record ReleasesDetail(
         String id,
         LocalDate date,
+        String description,
         BigDecimal value,
         ReleaseType type,
         String categoryId,
