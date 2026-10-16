@@ -10,6 +10,7 @@ import io.github.kl.planning_api.domain.category.model.CategoryEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +56,13 @@ public class CategoryService {
 
     public List<CategoryDetails> listCategoriesActive() {
         return repository.findByActiveTrue()
+                .stream()
+                .map(mapper::toDetails)
+                .toList();
+    }
+
+    public List<CategoryDetails> listAll() {
+        return repository.findAll(Sort.by("name"))
                 .stream()
                 .map(mapper::toDetails)
                 .toList();

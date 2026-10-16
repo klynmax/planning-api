@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.YearMonth;
+import java.util.List;
 import java.util.UUID;
 
 import static io.github.kl.planning_api.domain.releases.ReleasesSpecs.*;
@@ -81,5 +82,4 @@ public class ReleasesService {
 
         return result.map(mapper::toDetails);
     }
-
 }

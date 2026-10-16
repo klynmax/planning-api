@@ -1,5 +1,7 @@
 package io.github.kl.planning_api.domain.releases;
 
+import io.github.kl.planning_api.domain.category.CategoryService;
+import io.github.kl.planning_api.domain.category.dto.CategoryDetails;
 import io.github.kl.planning_api.domain.releases.dto.ReleasesDetail;
 import io.github.kl.planning_api.domain.releases.model.ReleaseType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.DateTimeException;
 import java.time.YearMonth;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,6 +25,9 @@ public class ListingReleaseController {
 
     @Autowired
     private ReleasesService service;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping
     public Page<ReleasesDetail> getList(
@@ -36,6 +42,11 @@ public class ListingReleaseController {
         var typeReleasesSelect = parseType(type);
 
         return  service.getList(pageRequest, monthYear, typeReleasesSelect, categoryId);
+    }
+
+    @GetMapping("release-list-all")
+    public List<CategoryDetails> listAll() {
+        return categoryService.listAll();
     }
 
     private ReleaseType parseType(String type) {
