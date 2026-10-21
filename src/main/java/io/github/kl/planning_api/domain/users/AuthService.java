@@ -1,5 +1,6 @@
 package io.github.kl.planning_api.domain.users;
 
+import io.github.kl.planning_api.common.exceptions.UnauthorizedException;
 import io.github.kl.planning_api.common.exceptions.ValidationException;
 import io.github.kl.planning_api.common.validation.InvalidFields;
 import io.github.kl.planning_api.domain.users.dto.AuthResponse;
@@ -39,7 +40,18 @@ public class AuthService {
     }
 
     public AuthResponse authenticate(LoginForm form) {
-        return null;
+        final String message = "Login ou senha invalidos";
+
+        UserEntity user = usersRepository.findByLogin(form.login())
+                .orElseThrow(() -> new UnauthorizedException(message));
+
+        boolean passwordsMatch = encoder.matches(form.password(), user.getPassword());
+
+        if(!passwordsMatch) {
+            throw new UnauthorizedException(message);
+        }
+
+        return toAuthResponse(user);
     }
 
     private AuthResponse toAuthResponse(UserEntity user) {
