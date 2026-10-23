@@ -7,6 +7,7 @@ import io.github.kl.planning_api.domain.users.dto.AuthResponse;
 import io.github.kl.planning_api.domain.users.dto.LoginForm;
 import io.github.kl.planning_api.domain.users.dto.UsersRegisterForm;
 import io.github.kl.planning_api.domain.users.model.UserEntity;
+import io.github.kl.planning_api.infrastructure.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ public class AuthService {
 
     @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    private JwtService jwtService;
 
     public AuthResponse register(UsersRegisterForm form) {
         if(usersRepository.existsByLogin(form.login())) {
@@ -55,10 +59,12 @@ public class AuthService {
     }
 
     private AuthResponse toAuthResponse(UserEntity user) {
+        var token = jwtService.generationToken(user);
+        var expiresIn = jwtService.getExpirationSeconds();
         return new AuthResponse(
-                null,
+                token,
                 "Bearer",
-                0,
+                expiresIn,
                 user.getName()
         );
     }
