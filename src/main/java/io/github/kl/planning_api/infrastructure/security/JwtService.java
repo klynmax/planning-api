@@ -14,7 +14,7 @@ import java.util.Base64;
 @Service
 public class JwtService {
 
-    private static final String ALGORITHM = "HmacsSHA256";
+    private static final String ALGORITHM = "HmacSHA256";
 
     @Value("${app.jwt.secret}")
     private String secret;

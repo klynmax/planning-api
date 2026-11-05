@@ -1,6 +1,7 @@
 package io.github.kl.planning_api.infrastructure.handlers;
 
 import io.github.kl.planning_api.common.exceptions.RecordNotFoundException;
+import io.github.kl.planning_api.common.exceptions.UnauthorizedException;
 import io.github.kl.planning_api.common.exceptions.ValidationException;
 import io.github.kl.planning_api.common.validation.InvalidFields;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,21 @@ public class GlobalExceptionHandler {
                 Map.of(
                         "timestamp", LocalDateTime.now(),
                         "status", e.getStatusCode(),
+                        "error", e.getMessage(),
+                        "message", e.getMessage()
+                )
+        );
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<?> handleUnauthorizedException(UnauthorizedException e) {
+
+        var status = HttpStatus.UNAUTHORIZED;
+
+        return ResponseEntity.status(status)
+                .body(Map.of(
+                        "timestamp", LocalDateTime.now(),
+                        "status", status.value(),
                         "error", e.getMessage(),
                         "message", e.getMessage()
                 )
