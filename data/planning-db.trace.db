@@ -392,3 +392,6 @@ select * from tb_releases [42000-240]
 2026-10-15 13:39:32.391956-03:00 jdbc[13]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "delete [*]* from tb_releases"; expected "identifier"; SQL statement:
 delete * from tb_releases [42001-240]
+2026-11-05 11:35:49.135364-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE [*]* FROM USERS"; expected "identifier"; SQL statement:
+DELETE * FROM USERS [42001-240]
