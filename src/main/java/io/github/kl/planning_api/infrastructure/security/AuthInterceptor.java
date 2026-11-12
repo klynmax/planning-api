@@ -14,7 +14,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtService jwtService;
 
-    @Autowired
+    @Override
     public boolean preHandle(
             HttpServletRequest request,
             HttpServletResponse response,

@@ -34,17 +34,32 @@ public class JwtService {
     }
 
     public String generationToken(UserEntity user) {
-        long expiration = Instant.now().plusSeconds(expirationSeconds).getEpochSecond();
+
+        long expiration = Instant.now()
+                .plusSeconds(expirationSeconds)
+                .getEpochSecond();
+
         String header = base64Url("""
-                {"alg": "HS256", "typ": "JWT"}
-                """.formatted(user.getId().toString(), user.getName(), expiration));
+            {"alg": "HS256", "typ": "JWT"}
+            """);
+
         String payload = base64Url("""
-                { "sub": "%s", "name": "%s", "exp": %d }
-                """);
+            {
+                "sub": "%s",
+                "name": "%s",
+                "exp": %d
+            }
+            """.formatted(
+                user.getId().toString(),
+                user.getName(),
+                expiration
+        ));
+
         String signature = toSign(header + "." + payload);
 
         return header + "." + payload + "." + signature;
     }
+
 
     private String toSign(String content) {
         try {
@@ -74,8 +89,8 @@ public class JwtService {
             String header = tokenParts[0];
             String payload = tokenParts[1];
 
-            String expectedSignature = this.toSign(header + "." + payload);
-            if (expectedSignature.equals(tokenParts[3])) {
+            String expectedSignature = toSign(header + "." + payload);
+            if (!expectedSignature.equals(tokenParts[2])) {
                 return false;
             }
 
