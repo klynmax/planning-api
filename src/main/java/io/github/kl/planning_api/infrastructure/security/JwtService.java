@@ -1,14 +1,19 @@
 package io.github.kl.planning_api.infrastructure.security;
 
+import io.github.kl.planning_api.domain.users.UsersRepository;
 import io.github.kl.planning_api.domain.users.model.UserEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.UUID;
 
 
 @Service
@@ -20,6 +25,9 @@ public class JwtService {
     private String secret;
     @Value("${app.jwt.expiration-seconds}")
     private long expirationSeconds;
+
+    @Autowired
+    private UsersRepository usersRepository;
 
     public long getExpirationSeconds() {
         return expirationSeconds;
@@ -61,10 +69,44 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token) {
-        return false;
+        try {
+            String[] tokenParts = token.split("\\.");
+            String header = tokenParts[0];
+            String payload = tokenParts[1];
+
+            String expectedSignature = this.toSign(header + "." + payload);
+            if (expectedSignature.equals(tokenParts[3])) {
+                return false;
+            }
+
+            var payloadDecoded = Base64.getUrlDecoder().decode(payload);
+            var payloadString = new String(payloadDecoded, StandardCharsets.UTF_8);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode json = objectMapper.readTree(payloadString);
+            long expiredIn = json.get("exp").asLong();
+            long millisecondDataHourCurrent = Instant.now().getEpochSecond();
+
+            return millisecondDataHourCurrent < expiredIn;
+
+        } catch (RuntimeException e) {
+            return false;
+        }
     }
 
     public UserEntity getUser(String token) {
-        return null;
+        String[] tokenParts = token.split("\\.");
+        byte[] payloadDecoded = Base64.getUrlDecoder().decode(tokenParts[1]);
+        String payload = new String(payloadDecoded, StandardCharsets.UTF_8);
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode json = mapper.readTree(payload);
+
+        String id = json.get("sub").asString();
+        var user = usersRepository.findById(UUID
+                .fromString(id))
+                .orElseThrow(() -> new RuntimeException("Erro ao tentar resolver usuário."));
+
+        return user;
     }
 }
