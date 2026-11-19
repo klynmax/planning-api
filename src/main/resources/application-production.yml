@@ -2,10 +2,10 @@ spring:
   application:
     name: planning-api
   datasource:
-    url: jdbc:postgresql://localhost:5435/planning
+    url: ${DB_URL}
     driver-class-name: org.postgresql.Driver
-    username: planning
-    password: n3ry=z@PVF1s.@g>A-q!
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
